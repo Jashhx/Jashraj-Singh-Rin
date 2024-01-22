@@ -1,52 +1,90 @@
-# Prerequisites
-*.d
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+void generatePassword(char passwordType, int passwordLength);
+char generateRandomCharacter(char passwordType);
 
-# Linker output
-*.ilk
-*.map
-*.exp
+int main() {
+    srand(time(NULL));
 
-# Precompiled Headers
-*.gch
-*.pch
+    printf("Welcome To Password Generator 2024\n");
+    printf("You can generate any kind of password you would like to...\n");
+    printf("Choose one of the types below:\n");
+    printf("a) a to z\nb) A to Z\nc) 0 to 9\nd) special characters only\ne) anything\n");
+    printf("Enter the password type (a-e): ");
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+    char passwordType;
+    scanf(" %c", &passwordType);
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+    printf("Enter the password length: ");
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+    int passwordLength;
+    scanf("%d", &passwordLength);
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+    printf("How many passwords do you want? ");
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+    int passwordTimes;
+    scanf("%d", &passwordTimes);
+
+    while (passwordTimes > 0) {
+        generatePassword(passwordType, passwordLength);
+        passwordTimes--;
+        sleep(1);
+    }
+
+    printf("Do you want to generate passwords again (y/n)? ");
+
+    char isAgain;
+    scanf(" %c", &isAgain);
+
+    if (isAgain == 'y') {
+        main();
+    } else if (isAgain == 'n') {
+        printf("Thanks for using my password generator\n");
+    } else {
+        printf("Invalid input\n");
+    }
+
+    return 0;
+}
+
+void generatePassword(char passwordType, int passwordLength) {
+    char password[passwordLength + 1];
+
+    for (int i = 0; i < passwordLength; i++) {
+        password[i] = generateRandomCharacter(passwordType);
+    }
+
+    password[passwordLength] = '\0';
+    printf("Generated password: %s\n", password);
+}
+
+char generateRandomCharacter(char passwordType) {
+    char randomChar;
+
+    switch (passwordType) {
+        case 'a':
+            randomChar = (rand() % 26) + 'a';
+            break;
+        case 'b':
+            randomChar = (rand() % 26) + 'A';
+            break;
+        case 'c':
+            randomChar = (rand() % 10) + '0';
+            break;
+        case 'd':
+            randomChar = (rand() % 15) + 33; // ASCII range for special characters
+            break;
+        case 'e':
+            randomChar = (rand() % 94) + 33; // ASCII range for all printable characters
+            break;
+        default:
+            randomChar = '?';
+            break;
+    }
+
+    return randomChar;
+}
+
